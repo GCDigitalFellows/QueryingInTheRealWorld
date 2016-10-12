@@ -6,7 +6,7 @@ Created and presented by Tahir Butt <tahir.butt@gmail.com> on October 13, 2016.
 
 [![](https://img.youtube.com/vi/-RQxD4Ff7dY/0.jpg)](https://www.youtube.com/watch?v=-RQxD4Ff7dY)
 
-In this workshop, we will channel the spirit of [Toto]((https://en.wikipedia.org/wiki/Terry_(dog)), the dog from the much beloved [The Wizard of Oz](https://en.wikipedia.org/wiki/The_Wizard_of_Oz_(1939_film)) when he pulls back the curtain on the "Great Oz" to reveal an elderly man operating a machine. When discovered, the unmasked wizard hopelessly instructs his visitors to "Pay no attention to that man behind the curtain!" 
+In this workshop, we will channel the spirit of [Toto](https://en.wikipedia.org/wiki/Terry_(dog)), the dog from the much beloved [The Wizard of Oz](https://en.wikipedia.org/wiki/The_Wizard_of_Oz_(1939_film)) when he pulls back the curtain on the "Great Oz" to reveal an elderly man operating a machine. When discovered, the unmasked wizard hopelessly instructs his visitors to "Pay no attention to that man behind the curtain!" 
 
 Our task in this workshop is to do as Toto did before us, at least in the context of our computers. As you will learn through this workshop, the magic behind much of the software you use daily, often without considering the machines hidden from view, depend crucially on databases. Having pulled aside the curtain, we will begin to ask our computers questions we might not have previously been able to articulate, even to ourselves. The mechanics and logic you will learn in this workshop pertain to relational databases, one of many kinds of databases, though still the most important to many of our desktop and web applications. 
 
