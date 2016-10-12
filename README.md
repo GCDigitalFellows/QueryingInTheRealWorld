@@ -18,10 +18,12 @@ Ask better questions of databases. Experitise in the syntax is less important th
 
 ## Preparation
 
-Participants in the workshop are asked to have completed the following steps before the workshop. If you have any difficulties, please arrive 15 minutes before the workshop so issues can be sorted out.
+Participants in the workshop are asked to have completed the following steps on their own laptops before the workshop. If you have any difficulties, please arrive 15 minutes before the workshop so issues can be sorted out.
 
 1. If you attended [the first database workshop](https://digitalfellows.commons.gc.cuny.edu/2016/04/08/fun-times-with-sqlite-or-a-beginners-tutorial-to-data-management-and-databases-with-sql/) you will have already installed SQLiteStudio. For those who did not, you will want to download and install [SQLiteStudio](http://sqlitestudio.pl/?act=download).
-2. Optional: Download [Docker for Windows](https://download.docker.com/win/stable/InstallDocker.msi) or [Docker for Mac](https://download.docker.com/mac/stable/Docker.dmg) and follow the steps for installing on [Windows](https://docs.docker.com/docker-for-windows/#/step-1-install-docker-for-windows) or on [Mac](https://docs.docker.com/docker-for-mac/#/step-1-install-and-run-docker-for-mac). Also, download the [QueryingInTheRealWorld](https://github.com/GCDigitalFellows/QueryingInTheRealWorld) repository.
+2. If you are not already an active Zotero user, download [Zotero Standalone](https://www.zotero.org/download/), create a new account, begin adding some books and articles you have read or cited recently. If you are an EndNote user, you can easily [import into Zotero](https://www.zotero.org/support/kb/importing_records_from_endnote) your records.
+3. Optional: Download [Docker for Windows](https://download.docker.com/win/stable/InstallDocker.msi) or [Docker for Mac](https://download.docker.com/mac/stable/Docker.dmg) and follow the steps for installing on [Windows](https://docs.docker.com/docker-for-windows/#/step-1-install-docker-for-windows) or on [Mac](https://docs.docker.com/docker-for-mac/#/step-1-install-and-run-docker-for-mac). Also, download the [QueryingInTheRealWorld](https://github.com/GCDigitalFellows/QueryingInTheRealWorld) repository.
+4. And, remember: bring your laptop.
 
 If you are interested in the optional step, great! If not, no sweat! We will have a shared Wordpress server for the workshop that anyone who does not want to follow the optional step will be able to use. 
 
@@ -127,17 +129,17 @@ For now we can ignore the `ADD KEY` statements, which define the indexed columns
 
 But you might have also noticed that `wp_posts` and `wp_comments` have other columns of type `bigint(20) UNSIGNED` but are not primary keys. Instead of primary keys, these other `_ID` columns enable our tables to relate to one another: `wp_posts.post_author` and `wp_comments.comment_author` contain the value of the appropriate `wp_users.ID` who created the post or comment; `wp_comments.comment_post_ID` contain the value of the appropriate `wp_post.ID` for which the comment was created.
 
+Having mapped these relationships, we are now ready to ask questions of our data using SQL. If you are using your own Docker environment, open your web browser to [http://localhost:8080](http://localhost:8080) to load up the PHPMyAdmin web application. Otherwise, replace the "localhost" with the domain posted at the beginning of the workshop.
+
 ## Zotero Database
 
-One of the first applications I installed when I started graduate school was [Zotero](zotero.org). I use it pretty much every day, importing in articles and books I am finding through my research, annotating these items as I read them, and exporting bibliographies for papers I write. Over time, like many other graduate students, I have amassed a quite large Zotero library. Though hidden from plain sight, the Zotero application uses a database to store that library in an efficient and robust way. Without that database, it would be very easy to corrupt your library or a simple search for an author or a tag would be painfully slow. 
+One of the first applications many of us install when we start graduate school is [Zotero](zotero.org). I use it pretty much every day, importing in articles and books I find through my research, annotating items as I read them, and exporting bibliographies for papers I write. Over time, I, like many others, have amassed a large Zotero library. 
 
-Download standalone, create account, add your favorite books and articles.
+Though hidden from plain sight, the Zotero application uses a database to store that library in an efficient and robust way. Without that database, it would be very easy to corrupt your library as made changes or a simple search for an author or a tag across our library would be painfully slow. Fortunately for someone familiar with querying databases, the Zotero database can be [accessed without much headache](https://www.zotero.org/support/dev/client_coding/direct_sqlite_database_access) since Zotero uses [SQLite](https://www.sqlite.org/), a popular open source database engine used on [pretty much any computer or phone](https://www.sqlite.org/mostdeployed.html) you use daily.
 
-Fortunately for someone familiar with querying databases, we can access [the Zotero database without much headache](https://www.zotero.org/support/dev/client_coding/direct_sqlite_database_access) since Zotero uses [SQLite](https://www.sqlite.org/), a popular open source database engine used on [pretty much any computer or phone](https://www.sqlite.org/mostdeployed.html) you use daily.
+Before we proceed, a warning: the [Zotero Client Data Model](https://www.zotero.org/support/dev/data_model) is quite complex. Don't get discourged. Like with Wordpress, we will focus on only a subset of the tables. And as before, for those interested, you can examine the [full Zotero data model](http://zomark.github.io/zotero-marc/schema/trunk/relationships.html) at your leisure.
 
-The [Zotero Client Data Model](https://www.zotero.org/support/dev/data_model) is quite complex. We will focus on only a subset of the tables in this workshop. For those interested, you can examine the [full list of relationships](http://zomark.github.io/zotero-marc/schema/trunk/relationships.html) for the current data model.
-
-In preparation for the workshop, first locate your [Zotero data directory](https://www.zotero.org/support/zotero_data). Because I use Zotero Standalone on a Windows computer, mine is located in:
+In order to pracipate in the Zotero workshop exercises, you need to locate your [Zotero data directory](https://www.zotero.org/support/zotero_data). Because I use Zotero Standalone on a Windows computer, mine is located in:
 
 ```
 C:\Users\tahir\AppData\Roaming\Zotero\Zotero\Profiles\cud5bmqj.default\zotero
@@ -146,3 +148,7 @@ C:\Users\tahir\AppData\Roaming\Zotero\Zotero\Profiles\cud5bmqj.default\zotero
 You can find your folder by using clicking 'Preferences' in the 'Tools' menu drop-down. From there, select 'Advanced', then the 'Files and Folders' tab. Click the 'Show Data Directory' button in the 'Data Directory Location' section. This will bring open Finder (on OS X) or File Explorer (on Windows) with the directory where the `zotero.sqlite` file is stored.
 
 Once you have found your data directory, make a copy of the `zotero.sqlite` file and store it in another folder, like on your Desktop. This step is to avoid the possibility that in accessing the database we might change it unwittingly and create many hours of headaches for ourselves later. After this workshop, you can delete the copy in your Downloads directory safely.
+
+All you need to do now is start SQLiteStudio and create a new database connection for the copied sqlite file:
+
+![](sqlitestudio-connection-example.png)
